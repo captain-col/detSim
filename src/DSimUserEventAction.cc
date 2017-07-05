@@ -158,7 +158,7 @@ void DSimUserEventAction::EndOfEventAction(const G4Event* evt) {
                 continue;
             }
             traj->AddSDEnergyDeposit(energy);
-            traj->AddSDLength(g4Hit->GetLength());
+            traj->AddSDLength(g4Hit->GetTrackLength());
             for (int loopCount = 0; ; ++loopCount) {
                 int parentId = traj->GetParentID();
                 if (!parentId) break;
