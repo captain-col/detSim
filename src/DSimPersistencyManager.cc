@@ -16,6 +16,7 @@
 #include <G4PrimaryParticle.hh>
 #include <G4StepStatus.hh>
 #include <G4ProcessType.hh>
+#include <G4HadronicProcessType.hh>
 #include <G4EmProcessSubType.hh>
 
 #include <TPRegexp.h>
@@ -307,21 +308,29 @@ void DSimPersistencyManager::SelectTrajectoryPoints(
     // Save trajectory points where there is a "big" interaction.
     for (int tp = 1; tp < lastIndex; ++tp) {
         dsimPoint = dynamic_cast<DSimTrajectoryPoint*>(g4Traj->GetPoint(tp));
-        // Just navigation....
-        if (dsimPoint->GetProcessType() == fTransportation) continue;
-        // Not much energy deposit...
-        if (dsimPoint->GetProcessDeposit() < 0.5*MeV) continue;
-        // Don't save optical photons...
-        if (dsimPoint->GetProcessType() == fOptical) continue;
-        // Not a physics step...
-        if (dsimPoint->GetProcessType() == fGeneral) continue;
-        if (dsimPoint->GetProcessType() == fUserDefined) continue;
+        // Save all hadronic inelastic interactions
+        if (dsimPoint->GetProcessType() == fHadronic
+            && dsimPoint->GetProcessSubType() == fHadronInelastic) {
+            selected.push_back(tp);
+            continue;
+        }
+        // Save larger hadronic elastic interactions
+        if (dsimPoint->GetProcessType() == fHadronic
+            && dsimPoint->GetProcessSubType() == fHadronElastic
+            && dsimPoint->GetProcessDeposit() > 0.5*MeV) {
+            selected.push_back(tp);
+            continue;
+        }
+        // Skip non-EM processes.
+        if (dsimPoint->GetProcessType() != fElectromagnetic) continue;
         // Don't save continuous ionization steps.
-        if (dsimPoint->GetProcessType() == fElectromagnetic
-            && dsimPoint->GetProcessSubType() == fIonisation) continue;
+        if (dsimPoint->GetProcessSubType() == fIonisation) continue;
         // Don't save multiple scattering.
-        if (dsimPoint->GetProcessType() == fElectromagnetic
-            && dsimPoint->GetProcessSubType() == fMultipleScattering) continue;
+        if (dsimPoint->GetProcessSubType() == fMultipleScattering) continue;
+        // Don't save sensitive detector processes.
+        if (dsimPoint->GetProcessSubType() >= fCerenkov) continue;
+        // Don't save very small deposits.
+        if (dsimPoint->GetProcessDeposit() < 0.5*MeV) continue;
         selected.push_back(tp);
     }
 
