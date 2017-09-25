@@ -62,3 +62,6 @@ path_prepend PATH "$(DETSIMROOT)/scripts"
 private
 use captControl
 end_private
+
+# Define a setup script to cause the installed geant setup script to be run.
+setup_script geant_setup
