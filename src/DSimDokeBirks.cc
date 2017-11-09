@@ -1,6 +1,7 @@
 #include "G4ParticleTypes.hh" //lets you refer to G4OpticalPhoton, etc.
 #include "G4EmProcessSubType.hh" //lets you call this process Scintillation
 #include "G4Version.hh" //tells you what Geant4 version you are running
+#include <G4SystemOfUnits.hh>
 
 #include "DSimDokeBirks.hh"
 

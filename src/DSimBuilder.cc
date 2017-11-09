@@ -27,7 +27,7 @@ DSimBuilder::DSimBuilder(G4String n, DSimBuilder* p)
     fMessenger = fParent->GetMessenger();
 }
 
-DSimBuilder::~DSimBuilder() {;};
+DSimBuilder::~DSimBuilder() {;}
 
 G4LogicalVolume *DSimBuilder::GetPiece(void) {
     DSimThrow("DSimBuilder::GetPiece(): Not implemented");

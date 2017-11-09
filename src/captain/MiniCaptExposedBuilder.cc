@@ -13,6 +13,7 @@
 #include <G4VisAttributes.hh>
 #include <G4Tubs.hh>
 #include <G4Polyhedra.hh>
+#include <G4SystemOfUnits.hh>
 
 class MiniCaptExposedMessenger
     : public DSimBuilderMessenger {
@@ -35,7 +36,7 @@ void MiniCaptExposedBuilder::Init(void) {
     SetMessenger(new MiniCaptExposedMessenger(this));
 }
 
-MiniCaptExposedBuilder::~MiniCaptExposedBuilder() {};
+MiniCaptExposedBuilder::~MiniCaptExposedBuilder() {}
 
 double MiniCaptExposedBuilder::GetRadius() {
     return 65*cm;

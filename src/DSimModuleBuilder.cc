@@ -8,6 +8,7 @@
 #include <G4VPhysicalVolume.hh>
 #include <G4PVPlacement.hh>
 #include <G4VisAttributes.hh>
+#include <G4SystemOfUnits.hh>
 
 #include <DSimLog.hh>
 
@@ -43,7 +44,7 @@ void DSimModuleBuilder::Init() {
     fTransList = new TransList();
 
     xmax = xmin = ymax = ymin = 0.0*mm;
-};
+}
 
 G4LogicalVolume *DSimModuleBuilder::GetPiece(void) {
 

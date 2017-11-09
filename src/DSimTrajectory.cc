@@ -8,6 +8,7 @@
 #include <G4AttDef.hh>
 #include <G4AttValue.hh>
 #include <G4UnitsTable.hh>
+#include <G4SystemOfUnits.hh>
 
 #include "DSimTrajectory.hh"
 #include "DSimTrajectoryPoint.hh"
@@ -105,18 +106,6 @@ void DSimTrajectory::MarkTrajectory(bool save) {
     traj->MarkTrajectory(save);
 }
 
-void DSimTrajectory::ShowTrajectory(std::ostream& os) const {
-    // Invoke the default implementation in G4VTrajectory...
-    G4VTrajectory::ShowTrajectory(os);
-    // ... or override with your own code here.
-}
-
-void DSimTrajectory::DrawTrajectory(G4int i_mode) const {
-    // Invoke the default implementation in G4VTrajectory...
-    G4VTrajectory::DrawTrajectory(i_mode);
-    // ... or override with your own code here.
-}
-
 const std::map<G4String,G4AttDef>* DSimTrajectory::GetAttDefs() const {
     G4bool isNew;
     std::map<G4String,G4AttDef>* store
@@ -164,34 +153,34 @@ const std::map<G4String,G4AttDef>* DSimTrajectory::GetAttDefs() const {
 
 std::vector<G4AttValue>* DSimTrajectory::CreateAttValues() const {
     std::string c;
-    std::ostringstream s(c);
+    std::ostringstream strm(c);
     
     std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
     
-    s.seekp(std::ios::beg);
-    s << fTrackID << std::ends;
+    strm.seekp(std::ios::beg);
+    strm << fTrackID << std::ends;
     values->push_back(G4AttValue("ID",c.c_str(),""));
     
-    s.seekp(std::ios::beg);
-    s << fParentID << std::ends;
+    strm.seekp(std::ios::beg);
+    strm << fParentID << std::ends;
     values->push_back(G4AttValue("PID",c.c_str(),""));
     
     values->push_back(G4AttValue("PN",fParticleName,""));
     
-    s.seekp(std::ios::beg);
-    s << fPDGCharge << std::ends;
+    strm.seekp(std::ios::beg);
+    strm << fPDGCharge << std::ends;
     values->push_back(G4AttValue("Ch",c.c_str(),""));
     
-    s.seekp(std::ios::beg);
-    s << fPDGEncoding << std::ends;
+    strm.seekp(std::ios::beg);
+    strm << fPDGEncoding << std::ends;
     values->push_back(G4AttValue("PDG",c.c_str(),""));
     
-    s.seekp(std::ios::beg);
-    s << G4BestUnit(fInitialMomentum,"Energy") << std::ends;
+    strm.seekp(std::ios::beg);
+    strm << G4BestUnit(fInitialMomentum,"Energy") << std::ends;
     values->push_back(G4AttValue("IMom",c.c_str(),""));
     
-    s.seekp(std::ios::beg);
-    s << GetPointEntries() << std::ends;
+    strm.seekp(std::ios::beg);
+    strm << GetPointEntries() << std::ends;
     values->push_back(G4AttValue("NTP",c.c_str(),""));
     
     return values;
@@ -208,14 +197,14 @@ G4ParticleDefinition* DSimTrajectory::GetParticleDefinition() const {
 
 void DSimTrajectory::MergeTrajectory(G4VTrajectory* secondTrajectory) {
     if(!secondTrajectory) return;
-    DSimTrajectory* second = (DSimTrajectory*)secondTrajectory;
-    G4int ent = second->GetPointEntries();
+    DSimTrajectory* append = (DSimTrajectory*)secondTrajectory;
+    G4int ent = append->GetPointEntries();
     // initial point of the second trajectory should not be merged
     for(G4int i=1; i<ent; ++i) { 
-        fPositionRecord->push_back((*(second->fPositionRecord))[i]);
+        fPositionRecord->push_back((*(append->fPositionRecord))[i]);
     }
-    delete (*second->fPositionRecord)[0];
-    second->fPositionRecord->clear();
+    delete (*append->fPositionRecord)[0];
+    append->fPositionRecord->clear();
 }
 
 

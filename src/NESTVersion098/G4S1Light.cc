@@ -45,11 +45,14 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
-#include "G4ParticleTypes.hh" //lets you refer to G4OpticalPhoton, etc.
-#include "G4EmProcessSubType.hh" //lets you call this process Scintillation
-#include "G4Version.hh" //tells you what Geant4 version you are running
-
 #include "G4S1Light.hh"
+
+#include <G4ParticleTypes.hh> //lets you refer to G4OpticalPhoton, etc.
+#include <G4EmProcessSubType.hh> //lets you call this process Scintillation
+#include <G4Version.hh> //tells you what Geant4 version you are running
+
+#include <G4SystemOfUnits.hh>
+#include <G4PhysicalConstants.hh>
 
 #define MIN_ENE -1*eV //lets you turn NEST off BELOW a certain energy
 #define MAX_ENE 1.*TeV //lets you turn NEST off ABOVE a certain energy
@@ -542,7 +545,8 @@ G4S1Light::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         G4int NumQuanta = //stochastic variation in NumQuanta
           G4int(floor(G4RandGauss::shoot(MeanNumberOfQuanta,sigma)+0.5));
         G4double LeffVar = G4RandGauss::shoot(YieldFactor,0.25*YieldFactor);
-        if (LeffVar > 1) LeffVar = 1.00000; if (LeffVar < 0) LeffVar = 0;
+        if (LeffVar > 1) LeffVar = 1.00000;
+        else if (LeffVar < 0) LeffVar = 0;
         if ( YieldFactor < 1 ) NumQuanta = BinomFluct(NumQuanta,LeffVar);
         //if E below work function, can't make any quanta, and if NumQuanta
         //less than zero because Gaussian fluctuated low, update to zero
@@ -911,7 +915,9 @@ G4S1Light::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
               // singlet, triplet lifetimes, and recombination time, are
               // handled here, to create a realistic S1 pulse shape/timing
               G4double aSecondaryTime = t0+G4UniformRand()*(t1-t0)+evtStrt;
-              if (tau1<0) tau1=0; if (tau3<0) tau3=0; if (tauR<0) tauR=0;
+              if (tau1<0) tau1=0;
+              if (tau3<0) tau3=0;
+              if (tauR<0) tauR=0;
               if ( aQuantum->GetDefinition()->
                    GetParticleName()=="opticalphoton" ) {
                 if ( abs(z2-z1) && !fAlpha && //electron recoil
@@ -993,7 +999,8 @@ G4S1Light::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	      //re-scale radius to ensure no generation of quanta outside
               //the active volume of your simulation due to Geant4 rounding
 	      if ( radius >= R_TOL ) {
-		if (x0[0] == 0) x0[0] = 1*nm; if (x0[1] == 0) x0[1] = 1*nm;
+		if (x0[0] == 0) x0[0] = 1*nm;
+                if (x0[1] == 0) x0[1] = 1*nm;
 		radius -= R_TOL; phi = atan ( x0[1] / x0[0] );
 		x0[0] = fabs(radius*cos(phi))*((fabs(x0[0]))/(x0[0]));
 		x0[1] = fabs(radius*sin(phi))*((fabs(x0[1]))/(x0[1]));

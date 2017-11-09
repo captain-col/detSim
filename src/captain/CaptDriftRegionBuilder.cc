@@ -12,6 +12,7 @@
 #include <G4RotationMatrix.hh>
 #include <G4VisAttributes.hh>
 #include <G4UserLimits.hh>
+#include <G4SystemOfUnits.hh>
 
 #include <G4Polyhedra.hh>
 
@@ -88,7 +89,7 @@ void CaptDriftRegionBuilder::Init(void) {
     AddBuilder(new CaptWirePlaneBuilder("GroundPlane",this));
 }
 
-CaptDriftRegionBuilder::~CaptDriftRegionBuilder() {};
+CaptDriftRegionBuilder::~CaptDriftRegionBuilder() {}
 
 double CaptDriftRegionBuilder::GetHeight() {
     CaptWirePlaneBuilder& wires = Get<CaptWirePlaneBuilder>("XPlane");

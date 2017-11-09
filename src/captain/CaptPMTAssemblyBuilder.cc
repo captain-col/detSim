@@ -16,6 +16,7 @@
 #include <G4Tubs.hh>
 #include <G4Box.hh>
 #include <G4SubtractionSolid.hh>
+#include <G4SystemOfUnits.hh>
 
 class CaptPMTAssemblyMessenger
     : public DSimBuilderMessenger {
@@ -62,7 +63,7 @@ void CaptPMTAssemblyBuilder::Init(void) {
     AddBuilder(new CaptPMTBuilder("PMT",this));
 }
 
-CaptPMTAssemblyBuilder::~CaptPMTAssemblyBuilder() {};
+CaptPMTAssemblyBuilder::~CaptPMTAssemblyBuilder() {}
 
 double CaptPMTAssemblyBuilder::GetHeight() {
     CaptPMTBuilder& pmt = Get<CaptPMTBuilder>("PMT");

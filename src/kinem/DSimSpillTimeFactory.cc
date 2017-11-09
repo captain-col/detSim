@@ -1,6 +1,7 @@
 #include <sstream>
 
 #include <globals.hh>
+#include <G4SystemOfUnits.hh>
 
 #include <DSimLog.hh>
 

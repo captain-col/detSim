@@ -37,8 +37,11 @@
 //  New impelemenataion as an utility class  M.Asai, 26 July 2004
 // ----------------------------------------------------------------------
 
-#include "G4ThermalElectron.hh"
-#include "G4ParticleTable.hh"
+#include <G4ThermalElectron.hh>
+#include <G4ParticleTable.hh>
+
+#include <G4SystemOfUnits.hh>
+#include <G4PhysicalConstants.hh>
 
 // ######################################################################
 // ###                    THERMAL (DRIFT) ELECTRON                    ###

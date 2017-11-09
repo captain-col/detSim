@@ -57,4 +57,4 @@ captain-process-detsim-macro ${DETSIM_MACRO}
 #####################################################
 # Try to run ELECSIM, calibration, and reconstruction.
 #####################################################
-captain-run-reconstruction
+# captain-run-reconstruction

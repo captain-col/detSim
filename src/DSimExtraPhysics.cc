@@ -21,7 +21,7 @@
 #include <G4StepLimiter.hh>
 
 DSimExtraPhysics::DSimExtraPhysics() 
-    : G4VPhysicsConstructor("DSim Extra"), fIonizationModel(1) { }
+    : G4VPhysicsConstructor("DSimExtraPhysics"), fIonizationModel(1) { }
 
 DSimExtraPhysics::~DSimExtraPhysics() { }
 
@@ -32,6 +32,9 @@ void DSimExtraPhysics::ConstructParticle() {
 void DSimExtraPhysics::ConstructProcess() {
     DSimLog("DSimExtraPhysics:: Add Extra Physics Processes");
 
+    G4ParticleTable::G4PTblDicIterator* theParticleIterator
+        = theParticleTable->GetIterator();
+    
     theParticleIterator->reset();
     while ((*theParticleIterator)()) {
         G4ParticleDefinition* particle = theParticleIterator->value();

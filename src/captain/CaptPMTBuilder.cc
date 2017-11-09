@@ -13,6 +13,7 @@
 #include <G4Polyhedra.hh>
 #include <G4Box.hh>
 #include <G4Tubs.hh>
+#include <G4SystemOfUnits.hh>
 
 #include <cmath>
 
@@ -75,7 +76,7 @@ void CaptPMTBuilder::Init(void) {
     SetBaseLength(25*mm);
 }
 
-CaptPMTBuilder::~CaptPMTBuilder() {};
+CaptPMTBuilder::~CaptPMTBuilder() {}
 
 G4LogicalVolume *CaptPMTBuilder::GetPiece(void) {
     const double glassThickness = 3*mm;

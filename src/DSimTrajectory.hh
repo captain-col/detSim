@@ -89,8 +89,7 @@ public:
     /// Check if this trajectory should be saved.
     bool SaveTrajectory() const { return fSaveTrajectory;}
 
-    virtual void ShowTrajectory(std::ostream& os=G4cout) const;
-    virtual void DrawTrajectory(G4int i_mode=0) const;
+    // Add a new step to the trajectory.
     virtual void AppendStep(const G4Step* aStep);
 
     /// Get the number of trajectory points saved with this trajectory.

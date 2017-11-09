@@ -14,6 +14,7 @@
 #include <G4VisAttributes.hh>
 #include <G4Tubs.hh>
 #include <G4Polyhedra.hh>
+#include <G4SystemOfUnits.hh>
 
 class CaptImmersedMessenger
     : public DSimBuilderMessenger {
@@ -49,7 +50,7 @@ void CaptImmersedBuilder::Init(void) {
     drift.SetWirePlaneSpacing(3.18*mm);
 }
 
-CaptImmersedBuilder::~CaptImmersedBuilder() {};
+CaptImmersedBuilder::~CaptImmersedBuilder() {}
 
 double CaptImmersedBuilder::GetRadius() {
     CaptDriftRegionBuilder& drift = Get<CaptDriftRegionBuilder>("Drift");

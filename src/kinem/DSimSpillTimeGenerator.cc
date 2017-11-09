@@ -2,6 +2,8 @@
 #include "kinem/DSimSpillTimeGenerator.hh"
 
 #include <Randomize.hh>
+#include <G4SystemOfUnits.hh>
+#include <G4PhysicalConstants.hh>
 
 #include <DSimLog.hh>
 

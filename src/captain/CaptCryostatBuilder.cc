@@ -18,6 +18,7 @@
 #include <G4VisAttributes.hh>
 #include <G4Tubs.hh>
 #include <G4Polycone.hh>
+#include <G4SystemOfUnits.hh>
 
 #include <TEventContext.hxx>
 
@@ -92,7 +93,7 @@ void CaptCryostatBuilder::Init(void) {
     AddBuilder(new MiniCaptExposedBuilder("mExposed",this));
 }
 
-CaptCryostatBuilder::~CaptCryostatBuilder() {};
+CaptCryostatBuilder::~CaptCryostatBuilder() {}
 
 G4ThreeVector CaptCryostatBuilder::GetOffset() {
     return G4ThreeVector(0,0,0);

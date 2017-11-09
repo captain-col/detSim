@@ -13,6 +13,7 @@
 #include <G4VisAttributes.hh>
 #include <G4Tubs.hh>
 #include <G4Polyhedra.hh>
+#include <G4SystemOfUnits.hh>
 
 class CaptExposedMessenger
     : public DSimBuilderMessenger {

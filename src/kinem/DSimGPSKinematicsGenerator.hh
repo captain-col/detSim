@@ -3,6 +3,7 @@
 
 #include <globals.hh>
 #include <G4LorentzVector.hh>
+#include <G4SystemOfUnits.hh>
 
 #include "kinem/DSimVKinematicsGenerator.hh"
 

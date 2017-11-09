@@ -7,11 +7,12 @@
 
 #include <DSimLog.hh>
 
+#include <Randomize.hh>
 #include <G4Event.hh>
 #include <G4StateManager.hh>
 #include <G4RunManager.hh>
 #include <G4VPrimaryGenerator.hh>
-#include <Randomize.hh>
+#include <G4SystemOfUnits.hh>
 
 DSimUserPrimaryGeneratorAction::DSimUserPrimaryGeneratorAction() {
     fMessenger = new DSimUserPrimaryGeneratorMessenger(this);

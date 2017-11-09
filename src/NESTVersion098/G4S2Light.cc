@@ -50,6 +50,9 @@
 #include "G4S2Light.hh"
 #include "G4S1Light.hh"
 
+#include <G4SystemOfUnits.hh>
+#include <G4PhysicalConstants.hh>
+
 #define E_PURITY 2*m //the electron absorption z-length
 #define GRID_DENSITY 8.03*(g/cm3) //density of your grid material
 
@@ -288,8 +291,8 @@ G4double G4S2Light::GetMeanFreePath(const G4Track& aTrack,
   }
   else {
     *condition = NotForced;
-    const G4Material* aMaterial = aTrack.GetMaterial();
-    if ( aMaterial->GetDensity() == GRID_DENSITY )
+    const G4Material* tmp = aTrack.GetMaterial();
+    if ( tmp->GetDensity() == GRID_DENSITY )
       return DBL_MAX; //pass electrons through grid wires
     return 0*nm; //kill elsewhere
   }

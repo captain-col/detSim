@@ -13,6 +13,7 @@
 #include <G4Polyhedra.hh>
 #include <G4Box.hh>
 #include <G4Tubs.hh>
+#include <G4SystemOfUnits.hh>
 
 #include <cmath>
 
@@ -85,7 +86,7 @@ void CaptWirePlaneBuilder::Init(void) {
     SetMaximumHitSagitta(0.5*mm);
 }
 
-CaptWirePlaneBuilder::~CaptWirePlaneBuilder() {};
+CaptWirePlaneBuilder::~CaptWirePlaneBuilder() {}
 
 G4LogicalVolume *CaptWirePlaneBuilder::GetPiece(void) {
 

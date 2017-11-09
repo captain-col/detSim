@@ -5,6 +5,8 @@
 
 #include "kinem/DSimVKinematicsGenerator.hh"
 
+#include <G4SystemOfUnits.hh>
+
 class G4Event;
 
 /// This is an interface approximate the rock muons entering CAPTAIN.

@@ -7,6 +7,7 @@
 
 #include <globals.hh>
 #include <G4ParticleDefinition.hh>
+#include <G4SystemOfUnits.hh>
 
 DSimUserStackingAction::DSimUserStackingAction() { }
 

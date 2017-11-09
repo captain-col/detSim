@@ -10,6 +10,7 @@
 #include <G4THitsCollection.hh>
 #include <G4Allocator.hh>
 #include <G4ThreeVector.hh>
+#include <G4SystemOfUnits.hh>
 
 class G4Step;
 class G4Track;

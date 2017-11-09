@@ -24,6 +24,7 @@
 #include <G4SubtractionSolid.hh>
 #include <G4UnionSolid.hh>
 #include <G4ExtrudedSolid.hh>
+#include <G4SystemOfUnits.hh>
 
 #include <TROOT.h>
 #include <TMath.h>

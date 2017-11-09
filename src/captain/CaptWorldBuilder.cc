@@ -13,6 +13,7 @@
 #include <G4Box.hh>
 #include <G4Tubs.hh>
 #include <G4SubtractionSolid.hh>
+#include <G4SystemOfUnits.hh>
 
 #include <DSimLog.hh>
 
@@ -77,7 +78,7 @@ void CaptWorldBuilder::Init(void) {
 
 }
 
-CaptWorldBuilder::~CaptWorldBuilder() {};
+CaptWorldBuilder::~CaptWorldBuilder() {}
 
 G4LogicalVolume *CaptWorldBuilder::GetPiece(void) {
 

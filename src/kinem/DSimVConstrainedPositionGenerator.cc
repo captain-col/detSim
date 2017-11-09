@@ -1,6 +1,7 @@
 #include "kinem/DSimVConstrainedPositionGenerator.hh"
 #include "DSimException.hh"
 
+#include <Randomize.hh>
 #include <G4UnitsTable.hh>
 #include <G4TransportationManager.hh>
 #include <G4Navigator.hh>
@@ -10,7 +11,7 @@
 #include <G4LogicalVolume.hh>
 #include <G4Material.hh>
 #include <G4VisExtent.hh>
-#include <Randomize.hh>
+#include <G4SystemOfUnits.hh>
 
 #include <queue>
 

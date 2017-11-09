@@ -1,7 +1,26 @@
 ////////////////////////////////////////////////////////////
-// $Id: DSimRooTrackerKinematicsGenerator.cc,v 1.3 2013/01/17 14:12:03 mcgrew Exp $
 //
 
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <algorithm>
+#include <stdexcept>
+
+#include <globals.hh>
+#include <G4Event.hh>
+#include <G4PrimaryVertex.hh>
+#include <G4PrimaryParticle.hh>
+#include <G4ParticleTable.hh>
+#include <G4IonTable.hh>
+#include <G4ParticleDefinition.hh>
+#include <G4Tokenizer.hh>
+#include <G4UnitsTable.hh>
+
+#include <TFile.h>
+#include <TTree.h>
+#include <TObjString.h>
+#include <TTree.h>
 
 #include "DSimVertexInfo.hh"
 #include "DSimKinemPassThrough.hh"
@@ -10,22 +29,6 @@
 
 #include "DSimLog.hh"
 
-#include <globals.hh>
-#include <G4Event.hh>
-#include <G4PrimaryVertex.hh>
-#include <G4PrimaryParticle.hh>
-#include <G4ParticleTable.hh>
-#include <G4ParticleDefinition.hh>
-#include <G4Tokenizer.hh>
-#include <G4UnitsTable.hh>
-
-#include <TFile.h>
-#include <TTree.h>
-
-#include <iostream>
-#include <sstream>
-#include <string>
-#include <algorithm>
 
 DSimRooTrackerKinematicsGenerator::DSimRooTrackerKinematicsGenerator(
     const G4String& name, const G4String& filename, 
@@ -76,6 +79,16 @@ DSimRooTrackerKinematicsGenerator::DSimRooTrackerKinematicsGenerator(
     fTree->SetBranchAddress("StdHepLd",        fStdHepLd);
     fTree->SetBranchAddress("StdHepFm",        fStdHepFm);
     fTree->SetBranchAddress("StdHepLm",        fStdHepLm);
+#define PARENT_PARTICLE_PASS_THROUGH
+#ifdef PARENT_PARTICLE_PASS_THROUGH
+    fTree->SetBranchAddress("NuParentPdg",    &fNuParentPdg);
+    fTree->SetBranchAddress("NuParentDecMode",&fNuParentDecMode);
+    fTree->SetBranchAddress("NuParentDecP4",   fNuParentDecP4);
+    fTree->SetBranchAddress("NuParentDecX4",   fNuParentDecX4);
+    fTree->SetBranchAddress("NuParentProP4",   fNuParentProP4);
+    fTree->SetBranchAddress("NuParentProX4",   fNuParentProX4);
+    fTree->SetBranchAddress("NuParentProNVtx",&fNuParentProNVtx);
+#endif
 
     // Set the input tree to the current rootracker tree that this class is
     // using.
@@ -147,21 +160,18 @@ bool DSimRooTrackerKinematicsGenerator::GeneratePrimaryVertex(
 
     fInput->cd();
 
-    int entry;
-    do {
-        entry = fEntryVector.at(fNextEntry);
-        // Get current entry to be used as new vertex - see comment below.
+    int entry = fEntryVector.at(fNextEntry);
+    // Get current entry to be used as new vertex - see comment below.
         fTree->GetEntry(entry);
-        // Increment the next entry counter.
-        ++fNextEntry;
-    } while (fStdHepP4[0][3] > fEnergyCut/GeV);
-
     // Store current entry in the pass-through obj. N.B. To avoid mismatch 
     // and false results call DSimKinemPassThrough::AddEntry(fTreePtr, X)
     // where X is same as X in most recent call to fTreePtr->GetEntry(X).
     DSimKinemPassThrough::GetInstance()->AddEntry(fTree, entry);
     DSimVerbose("Use rooTracker event number " << fEvtNum 
                  << " (entry #" << entry << " in tree)");
+
+    // Increment the next entry counter.
+    ++fNextEntry;
 
     // Create a new vertex to add the new particles, and add the vertex to the
     // event.
@@ -219,7 +229,8 @@ bool DSimRooTrackerKinematicsGenerator::GeneratePrimaryVertex(
             int ionZ = (fStdHepPdg[cnt]/10000) % 1000;
             int type = (fStdHepPdg[cnt]/100000000);
             if (type == 10 && ionZ > 0 && ionA > ionZ) {
-                particleDef = particleTable->GetIon(ionZ, ionA, 0.*MeV);
+                G4IonTable* ionTable = particleTable->GetIonTable();
+                particleDef = ionTable->GetIon(ionZ, ionA, 0.*MeV);
             }
             else if (type == 20) {
                 // This is a pseudo-particle so skip it.
@@ -270,11 +281,61 @@ bool DSimRooTrackerKinematicsGenerator::GeneratePrimaryVertex(
         
         if (fStdHepStatus[cnt] == 0) {
             theIncomingVertex->SetPrimary(theParticle);
-        }else if (fStdHepStatus[cnt] == 1){
+        }
+        else if (fStdHepStatus[cnt] == 1){
             theVertex->SetPrimary(theParticle);
         }
     }
 
+#ifdef PARENT_PARTICLE_PASS_THROUGH
+    // Fill the particles at the decay vertex.  These are the first info
+    // vertex.
+    G4PrimaryVertex* theDecayVertex 
+        = new G4PrimaryVertex(G4ThreeVector(fNuParentDecX4[0]*m,
+                                            fNuParentDecX4[1]*m,
+                                            fNuParentDecX4[2]*m),
+                              fNuParentDecX4[3]*second);
+    vertexInfo->AddInformationalVertex(theDecayVertex);
+
+    // Add an information field to the vertex.
+    DSimVertexInfo *decayVertexInfo = new DSimVertexInfo;
+    decayVertexInfo->SetName("beam-particle:Decay");
+    {
+        std::ostringstream tmp;
+        tmp << fNuParentDecMode;
+        decayVertexInfo->SetReaction(tmp.str());
+    }
+    theDecayVertex->SetUserInformation(decayVertexInfo);
+
+    G4PrimaryParticle* theDecayParticle
+        = new G4PrimaryParticle(fNuParentPdg,
+                                fNuParentDecP4[0]*GeV,
+                                fNuParentDecP4[1]*GeV,
+                                fNuParentDecP4[2]*GeV);
+    theDecayVertex->SetPrimary(theDecayParticle);
+
+    // Fill the particles at the production vertex.
+    G4PrimaryVertex* theProductionVertex 
+        = new G4PrimaryVertex(G4ThreeVector(fNuParentProX4[0]*m,
+                                            fNuParentProX4[1]*m,
+                                            fNuParentProX4[2]*m),
+                              fNuParentProX4[3]*second);
+    decayVertexInfo->AddInformationalVertex(theProductionVertex);
+
+    // Add information about the production vertex.
+    DSimVertexInfo *productionVertexInfo = new DSimVertexInfo;
+    productionVertexInfo->SetName("beam-particle:Production");
+    productionVertexInfo->SetInteractionNumber(fNuParentProNVtx);
+    theProductionVertex->SetUserInformation(productionVertexInfo);
+
+    G4PrimaryParticle* theProductionParticle
+        = new G4PrimaryParticle(fNuParentPdg,
+                                fNuParentProP4[0]*GeV,
+                                fNuParentProP4[1]*GeV,
+                                fNuParentProP4[2]*GeV);
+    theProductionVertex->SetPrimary(theProductionParticle);
+#endif
+    
     return true;
 }
 

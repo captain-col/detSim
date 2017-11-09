@@ -7,6 +7,7 @@
 #include <G4LogicalVolume.hh>
 #include <G4Material.hh>
 #include <G4VisExtent.hh>
+#include <G4SystemOfUnits.hh>
 
 #include <Randomize.hh>
 

@@ -68,7 +68,8 @@ DSimRootPersistencyManager* DSimRootPersistencyManager::GetInstance() {
 }
 
 DSimRootPersistencyManager::~DSimRootPersistencyManager() {
-    if (fOutput) delete fOutput; fOutput = NULL;
+    if (fOutput) delete fOutput;
+    fOutput = NULL;
 }
 
 bool DSimRootPersistencyManager::IsOpen() {
@@ -77,7 +78,7 @@ bool DSimRootPersistencyManager::IsOpen() {
         return true;
     }
     return false;
-};
+}
 
 bool DSimRootPersistencyManager::Open(G4String filename) {
     if (fOutput) {
