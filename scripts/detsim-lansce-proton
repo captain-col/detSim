@@ -87,4 +87,11 @@ captain-process-detsim-macro ${DETSIM_MACRO}
 #####################################################
 # Try to run ELECSIM, calibration, and reconstruction.
 #####################################################
+captain-run-electronics-simulation
+
+# The calibration should not save the digits.  It increases the output
+# file size by about x20, and can be regenerated later using elecSim.
+CAPTAIN_EVENT_LOOP_OPTIONS=" -O strip-digits "
+captain-run-calibration
+
 captain-run-reconstruction
