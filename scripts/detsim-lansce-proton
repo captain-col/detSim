@@ -39,20 +39,21 @@ cat <<EOF >> ${DETSIM_MACRO}
 
 /gps/particle proton
 /gps/pos/type Volume
-/gps/pos/shape Cylinder
+/gps/pos/shape Para
 /gps/pos/centre 0. -55. -168. mm
-/gps/pos/radius 100. mm
+/gps/pos/halfx 150. mm
+/gps/pos/halfy 150. mm
 /gps/pos/halfz 600 mm 
 /gps/pos/rot1 0 0 1
-/gps/pos/rot2 -0.1188 1.0 0
+/gps/pos/rot2 0.1188 1.0 0
 
 ####################################################################
 # Define the angular distribution of the protons.
 
 /gps/ang/type beam1d
-/gps/ang/sigma_r 30 deg
+/gps/ang/sigma_r 40 deg
 /gps/ang/rot1 0 0 1
-/gps/ang/rot2 -0.1188 1.0 0
+/gps/ang/rot2 -0.1188 -1.0 0
 
 ###################################################################
 # Define the energy distribution of the protons.  This is chosen to
