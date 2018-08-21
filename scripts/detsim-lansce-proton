@@ -92,7 +92,9 @@ captain-run-electronics-simulation
 
 # The calibration should not save the digits.  It increases the output
 # file size by about x20, and can be regenerated later using elecSim.
-CAPTAIN_EVENT_LOOP_OPTIONS=" -O strip-digits "
+# For the MC, it also should not try to remove the correlated
+# pedestals which adds a huge CPU burden.
+CAPTAIN_EVENT_LOOP_OPTIONS=" -O strip-digits -O no-correlation "
 captain-run-calibration
 
 captain-run-reconstruction
